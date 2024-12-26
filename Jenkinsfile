@@ -34,13 +34,19 @@ pipeline {
         }
 
         stage('Upload Package to EC2') {
-            steps {
-                powershell '''
-                Write-Host "Uploading package to EC2 instance..."
-                pscp -i aws-ec2-key.ppk -hostkey aa:bb:cc:dd:ee:ff:gg:hh website.zip $env:EC2_USER@$env:EC2_HOST:/tmp
-                '''
-            }
-        }
+    steps {
+        powershell '''
+        Write-Host "Uploading package to EC2 instance using PSCP..."
+        $keyFile = "C:\\keys\\aws-ec2-key.ppk"
+        $remotePath = "/tmp/website.zip"
+        $ec2User = "$env:EC2_USER@$env:EC2_HOST"
+
+        # Use PSCP to transfer the file
+        pscp -i $keyFile -scp website.zip $ec2User:$remotePath
+        '''
+    }
+}
+
 
         stage('Deploy with Chef') {
             steps {
