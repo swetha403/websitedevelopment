@@ -23,7 +23,7 @@ pipeline {
             steps {
                 powershell '''
                 Write-Host "Packaging application..."
-                Compress-Archive -Path * -DestinationPath website.zip
+                Compress-Archive -Path * -DestinationPath website.zip -Update
                 '''
             }
         }
