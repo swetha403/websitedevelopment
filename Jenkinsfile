@@ -22,8 +22,13 @@ pipeline {
         stage('Package Application') {
             steps {
                 powershell '''
+                Write-Host "Cleaning up existing ZIP file..."
+                if (Test-Path -Path "website.zip") {
+                    Remove-Item -Path "website.zip" -Force
+                }
+
                 Write-Host "Packaging application..."
-                Compress-Archive -Path * -DestinationPath website.zip -Update
+                Compress-Archive -Path * -DestinationPath website.zip
                 '''
             }
         }
