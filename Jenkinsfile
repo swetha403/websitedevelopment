@@ -39,14 +39,15 @@ pipeline {
         Write-Host "Uploading package to EC2 instance using PSCP..."
         $keyFile = "C:\\keys\\aws-ec2-key.ppk"
         $remotePath = "/tmp/website.zip"
-        $ec2User = "$env:EC2_USER@$env:EC2_HOST"
+        $ec2User = "${env:EC2_USER}"
+        $ec2Host = "${env:EC2_HOST}"
+        $destination = "$ec2User@$ec2Host:$remotePath"
 
         # Use PSCP to transfer the file
-        pscp -i $keyFile -scp website.zip $ec2User:$remotePath
+        pscp -i $keyFile -scp website.zip $destination
         '''
     }
 }
-
 
         stage('Deploy with Chef') {
             steps {
